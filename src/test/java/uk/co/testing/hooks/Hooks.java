@@ -16,8 +16,7 @@ public class Hooks {
 
     @Before
     public void setUp(){
-        WebDriverManager.chromedriver().setup();
-        driver = new ChromeDriver();
+        driver = WebDriverManager.chromedriver().create();
         dict.setDriver(driver);
     }
 
