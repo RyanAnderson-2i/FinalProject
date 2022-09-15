@@ -35,7 +35,7 @@ public class CartPOM {
     @FindBy(css = ".remove")
     private WebElement remove;
 
-    @FindBy(linkText = "Remove")
+    @FindBy(partialLinkText = "Remove")
     private WebElement removeCode;
 
     //Helper Methods
@@ -63,6 +63,10 @@ public class CartPOM {
             return false;
         }
         return true;
+    }
+
+    public void removeCode(){
+        removeCode.click();
     }
 
 }

@@ -69,9 +69,10 @@ public class EdgewordSteps {
         Thread.sleep(10000);
         String bodyText = driver.findElement(By.cssSelector("body")).getText();
         MatcherAssert.assertThat("promo code error", bodyText, containsString("Coupon code applied successfully"));
-        Thread.sleep(10000);
+        Thread.sleep(3000);
+        cart.removeCode();
+        Thread.sleep(3000);
         cart.removeAllItems();
-        Thread.sleep(10000);
     }
     @Then("I get a {int}% discount")
     public void i_get_a_discount(Integer int1) {
