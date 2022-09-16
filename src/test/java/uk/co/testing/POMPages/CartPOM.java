@@ -38,6 +38,18 @@ public class CartPOM {
     @FindBy(partialLinkText = "Remove")
     private WebElement removeCode;
 
+    @FindBy(xpath = "//*[@id=\"post-5\"]/div/div/div[2]/div/table/tbody/tr[1]/td/span/bdi")
+    private WebElement subTotal;
+
+    @FindBy(xpath = "//*[@id=\"shipping_method\"]/li/label/span/bdi")
+    private WebElement deliveryCost;
+
+    @FindBy(xpath = "//*[@id=\"post-5\"]/div/div/div[2]/div/table/tbody/tr[2]/td/span")
+    private WebElement discount;
+
+    @FindBy(xpath = "//*[@id=\"post-5\"]/div/div/div[2]/div/table/tbody/tr[4]/td/strong/span/bdi")
+    private WebElement total;
+
     //Helper Methods
     public void enterCode(String promocode){
         codeField.clear();
@@ -56,6 +68,22 @@ public class CartPOM {
         });
     }
 
+    public int getSubTotal(){
+        return getPrice(subTotal);
+    }
+
+    public int getDiscount(){
+        return getPrice(discount);
+    }
+
+    public int getDeliveryCost(){
+        return getPrice(deliveryCost);
+    }
+
+    public int getTotal(){
+        return getPrice(total);
+    }
+
     public boolean isBasketEmpty() {
         try {
             dict.getWait().until(drv -> drv.findElement(By.cssSelector(".cart-empty")));
@@ -67,6 +95,10 @@ public class CartPOM {
 
     public void removeCode(){
         removeCode.click();
+    }
+
+    private int getPrice(WebElement element) {
+        return Math.round(Integer.parseInt(element.getText().substring(1).replace(".", "")));
     }
 
 }
