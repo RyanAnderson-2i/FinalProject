@@ -66,17 +66,31 @@ public class EdgewordSteps {
     public void i_redeem_promo_code(String promocode) throws InterruptedException {
         cart.enterCode(promocode);
         cart.submitCode();
-        Thread.sleep(10000);
+        Thread.sleep(3000);
         String bodyText = driver.findElement(By.cssSelector("body")).getText();
         MatcherAssert.assertThat("promo code error", bodyText, containsString("Coupon code applied successfully"));
         Thread.sleep(3000);
-        cart.removeCode();
-        Thread.sleep(3000);
-        cart.removeAllItems();
     }
-    @Then("I get a {int}% discount")
-    public void i_get_a_discount(Integer int1) {
-        // Write code here that turns the phrase above into concrete actions
-        throw new io.cucumber.java.PendingException();
+    @Then("I get a {double}% discount")
+    public void i_get_a_discount(Double discountValue) throws InterruptedException {
+        var discount = cart.getDiscount();
+        var subTotal = cart.getSubTotal();
+        var delivery = cart.getDeliveryCost();
+        var total= cart.getTotal();
+
+        var costBeforeDelivery = total - delivery;
+
+        System.out.println(discount);
+        System.out.println(subTotal);
+        System.out.println(delivery);
+        System.out.println(total);
+
+        var test = 100 * (subTotal - costBeforeDelivery) / subTotal;
+
+        MatcherAssert.assertThat("Discount is correct", test, is(10));
+        MatcherAssert.assertThat("Final price matches discount", (int)Math.round(subTotal - costBeforeDelivery), is(discount));
+        Thread.sleep(3000);
+        cart.removeCode();
+        cart.removeAllItems();
     }
 }

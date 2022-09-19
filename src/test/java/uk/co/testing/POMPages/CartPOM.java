@@ -64,7 +64,6 @@ public class CartPOM {
         System.out.println("Removing " + basketItems.size() + " basket items.");
         basketItems.forEach(e -> {
             remove.click();
-            //dict.getWait().until(drv -> drv.findElement(By.cssSelector(".restore-item")));
         });
     }
 
@@ -95,6 +94,11 @@ public class CartPOM {
 
     public void removeCode(){
         removeCode.click();
+    }
+
+    public void fresh(){
+        removeCode();
+        removeAllItems();
     }
 
     private int getPrice(WebElement element) {

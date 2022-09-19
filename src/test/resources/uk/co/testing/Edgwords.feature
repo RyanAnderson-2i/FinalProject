@@ -11,4 +11,4 @@ Feature: Edgewords Shop
     When I add a item to the basket on the shop page
     And I navigate to the cart
     And I redeem promo code "edgewords"
-    Then I get a 15% discount
+    Then I get a 10% discount
