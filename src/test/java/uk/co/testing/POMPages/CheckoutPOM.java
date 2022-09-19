@@ -1,5 +1,7 @@
 package uk.co.testing.POMPages;
 
+import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -19,7 +21,6 @@ public class CheckoutPOM {
         this.dict = dict;
         this.driver = dict.getDriver();
         PageFactory.initElements(driver, this);
-        this.waitDriver = new WebDriverWait(driver, Duration.ofSeconds(3));
     }
     //Locators
     @FindBy(id = "billing_first_name")
@@ -55,4 +56,61 @@ public class CheckoutPOM {
 
     @FindBy(id = "#payment > ul > li.wc_payment_method.payment_method_cod > label")
     private WebElement cashRadio;
+
+
+    //Helper Methods
+    public void placeOrder(){
+        placeOrderButton.click();
+    }
+    public void payCheque(){
+        chequeRadio.click();
+    }
+    public void payCash(){
+        cashRadio.click();
+    }
+
+    public void setCountry(String country){
+        drp.selectByVisibleText(country);
+    }
+
+    public void setFirstName(String firstName){
+        enterValue(firstNameField, firstName);
+    }
+
+    public void setLastName(String lastName){
+        enterValue(lastNameField, lastName);
+    }
+
+    public void setAddress(String address){
+        enterValue(AddressField, address);
+    }
+
+    public void setCity(String city){
+        enterValue(cityField,city);
+    }
+
+    public void setPostcode(String postcode){
+        enterValue(postcodeField,postcode);
+    }
+
+    public void setPhoneNumber(String phoneNumber){
+        enterValue(phoneField,phoneNumber);
+    }
+
+    public void setEmail(String email){
+        enterValue(emailField,email);
+    }
+
+    private void enterValue(WebElement element, String value){
+        element.clear();
+        element.sendKeys(value);
+    }
+
+    public String captureOrderID(){
+        WebDriverWait myWait = new WebDriverWait(driver, Duration.ofSeconds(5));
+        myWait.until((drv) -> drv.findElement(By.cssSelector("li.woocommerce-order-overview__order.order > strong")));
+        String orderID = driver.findElement(By.cssSelector("li.woocommerce-order-overview__order.order > strong")).getText();
+
+        return orderID;
+    }
 }
