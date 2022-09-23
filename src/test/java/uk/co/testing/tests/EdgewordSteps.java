@@ -6,10 +6,7 @@ import io.cucumber.java.en.When;
 import org.hamcrest.MatcherAssert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import uk.co.testing.POMPages.CartPOM;
-import uk.co.testing.POMPages.LoginPagePOM;
-import uk.co.testing.POMPages.NavigationPOM;
-import uk.co.testing.POMPages.ShopPOM;
+import uk.co.testing.POMPages.*;
 import uk.co.testing.hooks.SharedDictionary;
 import static org.hamcrest.Matchers.*;
 
@@ -20,6 +17,8 @@ public class EdgewordSteps {
     private NavigationPOM nav;
     private CartPOM cart;
     private ShopPOM shop;
+    private CheckoutPOM checkout;
+    private ordersPOM orders;
     public EdgewordSteps(SharedDictionary dict) {
         this.dict = dict;
         this.driver = dict.getDriver();
@@ -27,6 +26,8 @@ public class EdgewordSteps {
         this.nav = new NavigationPOM(dict);
         this.shop = new ShopPOM(dict);
         this.cart = new CartPOM(dict);
+        this.checkout = new CheckoutPOM(dict);
+        this.orders = new ordersPOM(dict);
     }
 
     //Scenario 1
@@ -77,14 +78,7 @@ public class EdgewordSteps {
         var subTotal = cart.getSubTotal();
         var delivery = cart.getDeliveryCost();
         var total= cart.getTotal();
-
         var costBeforeDelivery = total - delivery;
-
-        System.out.println(discount);
-        System.out.println(subTotal);
-        System.out.println(delivery);
-        System.out.println(total);
-
         var test = 100 * (subTotal - costBeforeDelivery) / subTotal;
 
         MatcherAssert.assertThat("Discount is correct", test, is(10));
@@ -92,5 +86,33 @@ public class EdgewordSteps {
         Thread.sleep(3000);
         cart.removeCode();
         cart.removeAllItems();
+    }
+
+    @When("Place the order")
+    public void place_the_order() throws InterruptedException {
+        cart.checkout();
+        Thread.sleep(3000);
+        checkout.setFirstName("John");
+        checkout.setLastName("Doe");
+        //checkout.setCountry("United Kingdom");
+        checkout.setAddress("123 Fake Street");
+        checkout.setCity("Edinburgh");
+        checkout.setPostcode("EH11 3SR");
+        checkout.setPhoneNumber("1234567891");
+        checkout.setEmail("Ryan.Anderson@2itesting.com");
+        checkout.payCheque();
+        Thread.sleep(3000);
+    }
+
+    @Then("The order numbers should match")
+    public void the_order_numbers_should_match() throws InterruptedException {
+        checkout.placeOrder();
+        String orderID = checkout.captureOrderID();
+        System.out.println(orderID);
+        Thread.sleep(3000);
+        checkout.goToAccount();
+        orders.ordersPage();
+        String myOrderID = orders.getOrderId();
+        MatcherAssert.assertThat("Orders match", orderID, is(myOrderID));
     }
 }
