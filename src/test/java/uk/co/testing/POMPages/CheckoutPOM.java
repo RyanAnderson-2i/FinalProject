@@ -15,7 +15,6 @@ import java.time.Duration;
 public class CheckoutPOM {
     private WebDriver driver;
     private final SharedDictionary dict;
-    private WebDriverWait waitDriver;
 
     public CheckoutPOM(SharedDictionary dict) {
         this.dict = dict;
@@ -47,15 +46,18 @@ public class CheckoutPOM {
     @FindBy(id = "place_order")
     private WebElement placeOrderButton;
 
-    @FindBy(id = "select2-billing_country-container")
-    private WebElement dropdownMenu;
-    Select drp = new Select(dropdownMenu);
+    //@FindBy(id = "select2-billing_country-container")
+    //private WebElement dropdownMenu;
+    //Select drp = new Select(dropdownMenu);
 
-    @FindBy(id = "#payment > ul > li.wc_payment_method.payment_method_cheque > label")
+    @FindBy(xpath = "//*[@id=\"payment\"]/ul/li[1]/label")
     private WebElement chequeRadio;
 
-    @FindBy(id = "#payment > ul > li.wc_payment_method.payment_method_cod > label")
+    @FindBy(xpath = "//*[@id=\"payment\"]/ul/li[2]/label")
     private WebElement cashRadio;
+
+    @FindBy(linkText = "My account")
+    private WebElement accountLink;
 
 
     //Helper Methods
@@ -69,9 +71,9 @@ public class CheckoutPOM {
         cashRadio.click();
     }
 
-    public void setCountry(String country){
-        drp.selectByVisibleText(country);
-    }
+    //public void setCountry(String country){
+        //drp.selectByVisibleText(country);
+    //}
 
     public void setFirstName(String firstName){
         enterValue(firstNameField, firstName);
@@ -112,5 +114,9 @@ public class CheckoutPOM {
         String orderID = driver.findElement(By.cssSelector("li.woocommerce-order-overview__order.order > strong")).getText();
 
         return orderID;
+    }
+
+    public void goToAccount(){
+        accountLink.click();
     }
 }
