@@ -50,6 +50,9 @@ public class CartPOM {
     @FindBy(xpath = "//*[@id=\"post-5\"]/div/div/div[2]/div/table/tbody/tr[4]/td/strong/span/bdi")
     private WebElement total;
 
+    @FindBy(partialLinkText = "Proceed to checkout")
+    private WebElement checkoutButton;
+
     //Helper Methods
     public void enterCode(String promocode){
         codeField.clear();
@@ -99,6 +102,10 @@ public class CartPOM {
     public void fresh(){
         removeCode();
         removeAllItems();
+    }
+
+    public void checkout(){
+        checkoutButton.click();
     }
 
     private int getPrice(WebElement element) {
