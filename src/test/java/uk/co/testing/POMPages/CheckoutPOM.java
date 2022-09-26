@@ -46,10 +46,6 @@ public class CheckoutPOM {
     @FindBy(id = "place_order")
     private WebElement placeOrderButton;
 
-    //@FindBy(id = "select2-billing_country-container")
-    //private WebElement dropdownMenu;
-    //Select drp = new Select(dropdownMenu);
-
     @FindBy(xpath = "//*[@id=\"payment\"]/ul/li[1]/label")
     private WebElement chequeRadio;
 
@@ -58,7 +54,6 @@ public class CheckoutPOM {
 
     @FindBy(linkText = "My account")
     private WebElement accountLink;
-
 
     //Helper Methods
     public void placeOrder(){
@@ -70,10 +65,6 @@ public class CheckoutPOM {
     public void payCash(){
         cashRadio.click();
     }
-
-    //public void setCountry(String country){
-        //drp.selectByVisibleText(country);
-    //}
 
     public void setFirstName(String firstName){
         enterValue(firstNameField, firstName);
@@ -100,6 +91,17 @@ public class CheckoutPOM {
     }
 
     public void setEmail(String email){
+        enterValue(emailField,email);
+    }
+
+    public void enterCheckoutInformation(String firstName,String lastName,String address,String city,String postcode,
+                                         String phoneNumber,String email){
+        enterValue(firstNameField, firstName);
+        enterValue(lastNameField, lastName);
+        enterValue(AddressField, address);
+        enterValue(cityField,city);
+        enterValue(postcodeField,postcode);
+        enterValue(phoneField,phoneNumber);
         enterValue(emailField,email);
     }
 

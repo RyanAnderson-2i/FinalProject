@@ -58,9 +58,8 @@ public class EdgewordSteps {
         Thread.sleep(3000);
     }
     @When("I navigate to the cart")
-    public void i_navigate_to_the_cart() throws InterruptedException {
+    public void i_navigate_to_the_cart() {
         nav.goCart();
-        Thread.sleep(3000);
     }
     @When("I redeem promo code {string}")
     public void i_redeem_promo_code(String promocode) throws InterruptedException {
@@ -82,21 +81,22 @@ public class EdgewordSteps {
         MatcherAssert.assertThat("Discount is correct", test, is(discountValue));
         MatcherAssert.assertThat("Final price matches discount", (int)Math.round(subTotal - costBeforeDelivery), is(discount));
         Thread.sleep(3000);
-        cart.removeCode();
-        cart.removeAllItems();
+        cart.cleanUp();
     }
     @When("Place the order")
     public void place_the_order() throws InterruptedException {
         cart.checkout();
         Thread.sleep(3000);
-        checkout.setFirstName("John");
-        checkout.setLastName("Doe");
-        checkout.setAddress("123 Fake Street");
-        checkout.setCity("Edinburgh");
-        checkout.setPostcode("EH11 3SR");
-        checkout.setPhoneNumber("1234567891");
-        checkout.setEmail("Ryan.Anderson@2itesting.com");
+        //checkout.setFirstName("John");
+        //checkout.setLastName("Doe");
+        //checkout.setAddress("123 Fake Street");
+        //checkout.setCity("Edinburgh");
+        //checkout.setPostcode("EH11 3SR");
+        //checkout.setPhoneNumber("1234567891");
+        //checkout.setEmail("Ryan.Anderson@2itesting.com");
         checkout.payCheque();
+        checkout.enterCheckoutInformation("John","Doe","123 Fake Street","Edinburgh",
+                "EH11 3SR", "1234567801","testEmail@email.com");
         Thread.sleep(3000);
     }
     @Then("The order numbers should match")

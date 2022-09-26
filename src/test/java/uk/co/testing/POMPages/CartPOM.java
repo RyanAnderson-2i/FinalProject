@@ -63,7 +63,7 @@ public class CartPOM {
         applyCoupon.click();
     }
 
-    public void removeAllItems() {
+    private void removeAllItems() {
         System.out.println("Removing " + basketItems.size() + " basket items.");
         basketItems.forEach(e -> {
             remove.click();
@@ -95,11 +95,11 @@ public class CartPOM {
         return true;
     }
 
-    public void removeCode(){
+    private void removeCode(){
         removeCode.click();
     }
 
-    public void fresh(){
+    public void cleanUp(){
         removeCode();
         removeAllItems();
     }
