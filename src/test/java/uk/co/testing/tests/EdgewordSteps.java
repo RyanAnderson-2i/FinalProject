@@ -29,7 +29,6 @@ public class EdgewordSteps {
         this.checkout = new CheckoutPOM(dict);
         this.orders = new ordersPOM(dict);
     }
-
     //Scenario 1
     @Given("I am on the edgewords login page")
     public void i_am_on_the_edgewords_login_page() {
@@ -43,10 +42,8 @@ public class EdgewordSteps {
     @Then("I log in to my account")
     public void i_log_in_to_my_account() {
         String logOut =  driver.findElement(By.linkText("Log out")).getText();
-        System.out.println(logOut);
         MatcherAssert.assertThat(logOut, is("Log out"));
     }
-
     //Scenario 2
     @Given("I am logged in with my edgewords account {string} and {string}")
     public void i_am_logged_in_with_my_edgewords_account_and(String username, String password) {
@@ -55,13 +52,15 @@ public class EdgewordSteps {
         MatcherAssert.assertThat("Login successful", didWeLogin);
     }
     @When("I add a item to the basket on the shop page")
-    public void i_add_a_item_to_the_basket_on_the_shop_page() {
+    public void i_add_a_item_to_the_basket_on_the_shop_page() throws InterruptedException {
         nav.goShop();
         shop.addToCartRnd();
+        Thread.sleep(3000);
     }
     @When("I navigate to the cart")
-    public void i_navigate_to_the_cart() {
-        shop.viewCart();
+    public void i_navigate_to_the_cart() throws InterruptedException {
+        nav.goCart();
+        Thread.sleep(3000);
     }
     @When("I redeem promo code {string}")
     public void i_redeem_promo_code(String promocode) throws InterruptedException {
@@ -72,29 +71,26 @@ public class EdgewordSteps {
         MatcherAssert.assertThat("promo code error", bodyText, containsString("Coupon code applied successfully"));
         Thread.sleep(3000);
     }
-    @Then("I get a {double}% discount")
-    public void i_get_a_discount(Double discountValue) throws InterruptedException {
+    @Then("I get a {int}% discount")
+    public void i_get_a_discount(int discountValue) throws InterruptedException {
         var discount = cart.getDiscount();
         var subTotal = cart.getSubTotal();
         var delivery = cart.getDeliveryCost();
         var total= cart.getTotal();
         var costBeforeDelivery = total - delivery;
         var test = 100 * (subTotal - costBeforeDelivery) / subTotal;
-
-        MatcherAssert.assertThat("Discount is correct", test, is(10));
+        MatcherAssert.assertThat("Discount is correct", test, is(discountValue));
         MatcherAssert.assertThat("Final price matches discount", (int)Math.round(subTotal - costBeforeDelivery), is(discount));
         Thread.sleep(3000);
         cart.removeCode();
         cart.removeAllItems();
     }
-
     @When("Place the order")
     public void place_the_order() throws InterruptedException {
         cart.checkout();
         Thread.sleep(3000);
         checkout.setFirstName("John");
         checkout.setLastName("Doe");
-        //checkout.setCountry("United Kingdom");
         checkout.setAddress("123 Fake Street");
         checkout.setCity("Edinburgh");
         checkout.setPostcode("EH11 3SR");
@@ -103,16 +99,16 @@ public class EdgewordSteps {
         checkout.payCheque();
         Thread.sleep(3000);
     }
-
     @Then("The order numbers should match")
     public void the_order_numbers_should_match() throws InterruptedException {
         checkout.placeOrder();
         String orderID = checkout.captureOrderID();
-        System.out.println(orderID);
         Thread.sleep(3000);
-        checkout.goToAccount();
-        orders.ordersPage();
+        nav.goOrders();
+        //checkout.goToAccount();
+        //orders.ordersPage();
         String myOrderID = orders.getOrderId();
         MatcherAssert.assertThat("Orders match", orderID, is(myOrderID));
+        nav.logout();
     }
 }

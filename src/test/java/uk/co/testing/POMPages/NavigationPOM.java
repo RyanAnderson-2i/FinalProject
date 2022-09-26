@@ -17,20 +17,19 @@ public class NavigationPOM {
         PageFactory.initElements(driver, this);
     }
 
+    //Locators
     @FindBy(linkText = "Shop")
     private WebElement shopLink;
     @FindBy(linkText = "Cart")
     private WebElement cartLink;
-
     @FindBy(linkText = "My account")
     private WebElement myAccountLink;
-
     @FindBy(linkText = "Orders")
     private WebElement ordersLink;
-
     @FindBy(linkText = "Logout")
     private WebElement logoutLink;
 
+    //Helper Methods
     public void goHome() {
         driver.get("https://www.edgewordstraining.co.uk/demo-site/my-account/");
     }
