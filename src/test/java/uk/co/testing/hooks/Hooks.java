@@ -16,8 +16,27 @@ public class Hooks {
 
     @Before
     public void setUp(){
-        WebDriverManager.chromedriver().setup();
-        driver = new ChromeDriver();
+        String browser = System.getProperty("browser");
+        System.out.println("Browser set to: " + browser);
+        if (browser == null) {
+            browser = "";
+        }
+        switch (browser) {
+            case "firefox":
+                driver = WebDriverManager.firefoxdriver().create();
+                break;
+            case "chrome":
+                driver = WebDriverManager.chromedriver().create();
+                break;
+            case "safari":
+                WebDriverManager wdm = WebDriverManager.safaridriver().browserInDocker();
+                driver = wdm.create();
+                break;
+            default:
+                System.out.println("Browser not set at command line so using ChromeDriver");
+                driver = WebDriverManager.chromedriver().create();
+                break;
+        }
         dict.setDriver(driver);
     }
 
